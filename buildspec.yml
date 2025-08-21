@@ -21,8 +21,6 @@ phases:
       - REPO_URI=$ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/brain-tasks-app
       - echo $REPO_URI
       - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin $REPO_URI
-      - echo "Configuring kubectl for EKS..."
-      - aws eks update-kubeconfig --region ap-south-1 --name brain-tasks-cluster
       - echo "Updating kubeconfig for EKS cluster..."
       - aws eks update-kubeconfig --region $AWS_DEFAULT_REGION --name brain-tasks-cluster
   build:
