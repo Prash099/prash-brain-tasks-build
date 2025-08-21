@@ -18,7 +18,7 @@ phases:
       # - echo "Building Docker image..."
       # - docker build -t brain-tasks-app .
       # - docker tag brain-tasks-app:latest $REPO_URI:latest
-      # - echo "Pushing Docker image to ECR..."
+      # - echo "Pushing Docker image to ECR..." 
       # - docker push $REPO_URI:latest
       
       - echo "Deploying to Kubernetes..."
