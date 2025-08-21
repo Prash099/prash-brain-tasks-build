@@ -30,8 +30,8 @@ phases:
   post_build:
     commands:
       - echo "Build completed on `date`"
-      - kubectl get svc brain-tasks-service
+      - kubectl get svc
 
-artifacts:
-  files:
-    - imagedefinitions.json
+# artifacts:
+#   files:
+#     - imagedefinitions.json
