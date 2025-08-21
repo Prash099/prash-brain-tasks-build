@@ -1,0 +1,15 @@
+version: 0.0
+resources:
+  - name: brain-tasks-app
+    type: AWS::ECS::Service
+    properties:
+      taskDefinition: brain-tasks-app
+      loadBalancerInfo:
+        containerName: brain-tasks-app
+        containerPort: 80
+hooks:
+  AfterAllowTestTraffic:
+    - location: scripts/deploy.sh
+      timeout: 300
+      runas: root
+
