@@ -8,8 +8,7 @@ phases:
       - ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
       - REPO_URI=$ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/brain-tasks-app
       - echo $REPO_URI
-      - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin $REPO_URI
-      
+      - aws ecr get-login-password --region ap-south-1
       - echo "Updating kubeconfig for EKS cluster..."
       - aws eks update-kubeconfig --region ap-south-1 --name brain-tasks-cluster
 
