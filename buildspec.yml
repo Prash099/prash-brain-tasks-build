@@ -1,41 +1,38 @@
 version: 0.2
 
 phases:
-  install:
-    commands:
-      - echo "Installing kubectl..."
-      - curl -o kubectl https://s3.ap-south-1.amazonaws.com/amazon-eks/1.29.0/2024-07-11/bin/linux/amd64/kubectl
-      - chmod +x ./kubectl
-      - mv ./kubectl /usr/local/bin/
-
-      # Install aws-iam-authenticator (needed for EKS auth sometimes)
-      - echo "Installing aws-iam-authenticator..."
-      - curl -o aws-iam-authenticator https://s3.ap-south-1.amazonaws.com/amazon-eks/1.29.0/2024-07-11/bin/linux/amd64/aws-iam-authenticator
-      - chmod +x ./aws-iam-authenticator
-      - mv ./aws-iam-authenticator /usr/local/bin/
   pre_build:
     commands:
-      - echo Logging in to Amazon ECR...
+      - echo "Logging in to Amazon ECR..."
       - aws --version
       - ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
       - REPO_URI=$ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/brain-tasks-app
       - echo $REPO_URI
       - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin $REPO_URI
+      
       - echo "Updating kubeconfig for EKS cluster..."
-      - aws eks update-kubeconfig --region $AWS_DEFAULT_REGION --name brain-tasks-cluster
+      - aws eks update-kubeconfig --region ap-south-1 --name brain-tasks-cluster
+
   build:
     commands:
-      - echo Build started on `date`
-      # - docker build -t brain-tasks-app .
-      # - docker tag brain-tasks-app:latest $REPO_URI:latest
+      - echo "Build started on `date`"
+      - echo "Building Docker image..."
+      - docker build -t brain-tasks-app .
+      - docker tag brain-tasks-app:latest $REPO_URI:latest
+      - echo "Pushing Docker image to ECR..."
+      - docker push $REPO_URI:latest
+      
       - echo "Deploying to Kubernetes..."
       - kubectl apply -f k8s/deployment.yaml
       - kubectl apply -f k8s/service.yaml
+      - echo "Waiting for pods..."
+      - kubectl rollout status deployment/brain-tasks-app
+
   post_build:
     commands:
-      - echo Build completed on `date`
-      # - docker push $REPO_URI:latest
-      # - printf '[{"name":"brain-tasks-app","imageUri":"%s"}]' $REPO_URI:latest > imagedefinitions.json
-# artifacts:
-#   files: imagedefinitions.json
+      - echo "Build completed on `date`"
+      - kubectl get svc brain-tasks-app
 
+artifacts:
+  files:
+    - imagedefinitions.json
