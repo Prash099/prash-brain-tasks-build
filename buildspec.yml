@@ -19,8 +19,8 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - docker build -t brain-tasks-app .
-      - docker tag brain-tasks-app:latest $REPO_URI:latest
+      # - docker build -t brain-tasks-app .
+      # - docker tag brain-tasks-app:latest $REPO_URI:latest
       - echo "Deploying to Kubernetes..."
       - kubectl apply -f k8s/deployment.yaml
       - kubectl apply -f k8s/service.yaml
