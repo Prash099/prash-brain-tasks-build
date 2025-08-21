@@ -29,6 +29,6 @@ phases:
       - echo Build completed on `date`
       # - docker push $REPO_URI:latest
       # - printf '[{"name":"brain-tasks-app","imageUri":"%s"}]' $REPO_URI:latest > imagedefinitions.json
-artifacts:
-  files: imagedefinitions.json
+# artifacts:
+#   files: imagedefinitions.json
 
