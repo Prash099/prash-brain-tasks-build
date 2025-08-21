@@ -30,7 +30,7 @@ phases:
   post_build:
     commands:
       - echo "Build completed on `date`"
-      - kubectl get svc brain-tasks-app
+      - kubectl get svc brain-tasks-service
 
 artifacts:
   files:
